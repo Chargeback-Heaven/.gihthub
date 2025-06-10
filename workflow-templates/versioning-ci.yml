@@ -1,0 +1,25 @@
+name: Version Management
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  version:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Manual version bump
+        id: bump_version
+        run: .github/scripts/bump_version.sh
+
+      - name: Push changes
+        run: |
+          git push origin master --tags
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
